@@ -1,57 +1,77 @@
-# main.py - VERSIÓN DÍA 1
 import streamlit as st
+import numpy as np
+from PIL import Image
 import fisica
 import graficas
-from PIL import Image
 
-st.set_page_config(page_title="Epycentro", layout="wide")
+st.set_page_config(page_title="Epycentro - Simulador Sísmico", layout="wide", page_icon="🌋")
 
-# Cabecera
-st.title("Epycentro: Simulación de Ondas Sísmicas")
-st.markdown("""
-**Objetivos:**
-* Simular el comportamiento de ondas sísmicas (P, S y superficiales) a partir de un evento inicial.
-* Reproducir escenarios de terremotos o temblores para comprender mejor su dinámica.
-* Generar una herramienta didáctica para el análisis de fenómenos sísmicos.""")
-
-# Sidebar completa
+# BARRA LATERAL
 with st.sidebar:
     try:
         logo = Image.open("Epycentro.png")
         st.image(logo)
     except:
-        st.warning("No se encontró 'Epycentro.png'. Aegurese de guardarlo en la carpeta del proyecto.")
-
-    st.header("🔧 Configuración Sísmica")
-    st.info("Defina los parámetros iniciales del evento.")
+        st.write("🌋 Proyecto Epycentro")
+    
+    #Controles de magnitud, tipo de suelo y distacia
+    st.header("🎛️ Control de Sismo")
     magnitud = st.slider("Magnitud (Mw)", 1.0, 9.0, 5.0)
     suelo_select = st.selectbox("Material del Suelo", ["Roca", "Arena", "Arcilla"])
-    distancia = st.number_input("Distancia Epicentral (km)", value=50.0)
+    distancia = st.number_input("Distancia (km)", value=50.0)
+    # Control del tipo de onda
+    tipo_onda = st.radio("Fase Sísmica", ["Onda P", "Onda S", "Superficial"])
 
-# Uso de Pestañas para dar volumen al proyecto
-tab1, tab2, tab3 = st.tabs(["📊 Panel de Control", "📘 Marco Teórico", "👥 Equipo"])
+# Nombre de la página en grande y los objetivos
+st.title("🌋 Epycentro: Simulación Dinámica de Sísmos")
+st.markdown("""**Objetivos:**
+* Simular el comportamiento de ondas sísmicas (P, S y superficiales) a partir de un evento inicial.""")
+
+# Pestañas mostradas
+tab1, tab2, tab3 = st.tabs(["📊 Simulación & Panel", "📘 Marco Teórico", "👥 Equipo"])
+
+# Lógica del programa
+datos_suelo = fisica.obtener_propiedades(suelo_select) # Día 1
+t_teorico = fisica.calcular_tiempo_teorico(distancia, datos_suelo['vel']) # Día 1
+
+# Simulación
+t = np.linspace(0, 60, 1000)
+senal, t_llegada, amp_max = fisica.simular_evento(t, distancia, magnitud, datos_suelo, tipo_onda)
 
 with tab1:
+    # 1. Sección de Métricas (recupera los dato)
     st.subheader("Parámetros Físicos del Entorno")
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Velocidad Medio", f"{datos_suelo['vel']} km/s")
+    col2.metric("Amortiguamiento", f"{datos_suelo['amort']}")
+    col3.metric("Densidad", f"{datos_suelo['densidad']} g/cm³")
+    # Métrica nueva del Día 2
+    col4.metric("Tiempo Llegada Real", f"{t_llegada:.2f} s", delta=f"Teórico: {t_teorico:.2f} s")
     
-    # Llamamos a fisica.py para obtener datos
-    datos = fisica.obtener_propiedades(suelo_select)
-    t_teorico = fisica.calcular_tiempo_teorico(distancia, datos['vel'])
+    st.info(f"Suelo: {datos_suelo['desc']}")
     
-    # Mostramos métricas visuales
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Velocidad de Onda", f"{datos['vel']} km/s", delta="Constante")
-    col2.metric("Coef. Amortiguamiento", f"{datos['amort']}", delta_color="inverse")
-    col3.metric("Densidad Aprox.", f"{datos['densidad']} g/cm³")
+    st.markdown("---")
     
-    st.info(f"Descripción del medio: *{datos['desc']}*")
-    st.warning(f"⏳ Tiempo estimado de arribo (Onda P): **{t_teorico:.2f} s** (Cálculo preliminar)")
+    # 2. Sección de la Gráfica
+    st.subheader(f"Sismograma en Tiempo Real ({tipo_onda})")
+    grafico = graficas.renderizar_sismograma(t, senal, t_llegada, f"Registro en estación a {distancia} km")
+    st.altair_chart(grafico, use_container_width=True)
 
 with tab2:
-    st.subheader("Modelo Matemático Implementado")
-    st.markdown("El proyecto utilizará la siguiente ecuación diferencial para modelar el desplazamiento:")
-    # Mostramos la fórmula LaTeX que viene de fisica.py
+    # Marco teoríco
+    st.subheader("Modelo Matemático")
+    st.markdown("El comportamiento de la onda se rige por la ecuación diferencial amortiguada:")
     st.latex(fisica.formula_teorica_onda())
+    st.markdown("""
+    **Donde:**
+    * $A_0$: Amplitud inicial (función de la magnitud)
+    * $\\alpha$: Coeficiente de amortiguamiento del suelo
+    * $t$: Tiempo transcurrido desde el origen
+    """)
 
 with tab3:
-    st.write("Integrantes: Hugo Yael Castrejón Salgado, Miguel Angel Navarro Hernandez, Angel Jose Rendón Núñez.")
+    # Integrantes del Equipo
+    st.subheader("Integrantes del Equipo")
+    st.write("* Hugo Yael Castrejón Salgado")
+    st.write("* Miguel Angel Navarro Hernandez")
+    st.write("* Angel Jose Rendon Nuñez")

@@ -1,4 +1,3 @@
-# graficas.py - VERSIÓN DÍA 1
 import matplotlib.pyplot as plt
 
 def configurar_estilo_visual():
