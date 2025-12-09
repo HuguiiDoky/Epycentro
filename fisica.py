@@ -1,6 +1,6 @@
 import numpy as np
 
-# --- DATOS DEL DÍA 1 ---
+# Datos de propiedades del suelo
 DATOS_SUELO = {
     "Roca": {"vel": 6.0, "amort": 0.05, "densidad": 2.7, "desc": "Suelo rígido, alta velocidad."},
     "Arena": {"vel": 3.5, "amort": 0.10, "densidad": 1.9, "desc": "Suelo granular, disipación media."},
@@ -16,7 +16,7 @@ def calcular_tiempo_teorico(distancia, velocidad):
 def formula_teorica_onda():
     return r"A(t) = A_0 \cdot e^{-\alpha t} \cdot \sin(2\pi f t - kx)"
 
-# --- FUNCIÓN DEL DÍA 2 (AQUÍ ESTÁ EL DETALLE) ---
+# simulación de un evento sísmico
 def simular_evento(t, distancia, magnitud, suelo_data, tipo_onda):
     vel = suelo_data['vel']
     amort = suelo_data['amort']
@@ -37,5 +37,5 @@ def simular_evento(t, distancia, magnitud, suelo_data, tipo_onda):
     
     senal[mask] = amp_max * np.exp(-amort * t_fase) * np.sin(2 * np.pi * freq * t_fase)
     
-    # ⚠️ ESTA ES LA LÍNEA IMPORTANTE: TIENE QUE DEVOLVER 3 COSAS SEPARADAS POR COMAS
+    # Retornar la señal simulada, tiempo de llegada y amplitud máxima
     return senal, t_llegada, amp_max
