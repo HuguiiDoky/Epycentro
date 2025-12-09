@@ -1,13 +1,38 @@
+import altair as alt
+import pandas as pd
 import matplotlib.pyplot as plt
 
+# DÍA 1
 def configurar_estilo_visual():
-    """Configura los estilos globales de las gráficas para el modo oscuro."""
+    """Configura estilos globales (útil para cuando usemos Matplotlib en el futuro)."""
     plt.style.use('dark_background')
-    plt.rcParams['figure.facecolor'] = '#0E1117'
-    plt.rcParams['axes.facecolor'] = '#0E1117'
     plt.rcParams['text.color'] = 'white'
-    return "Estilos visuales configurados correctamente."
+    return "Estilos configurados."
 
-def obtener_placeholder_mapa():
-    """Genera una imagen vacía o texto para ocupar espacio en la UI."""
-    return "Aquí se visualizará el mapa de calor en lal fase 3."
+# DÍA 2
+def renderizar_sismograma(t, senal, t_llegada, titulo):
+    """
+    Genera el gráfico interactivo del sismograma.
+    """
+    df = pd.DataFrame({'Tiempo (s)': t, 'Amplitud (mm)': senal})
+    
+    # Grafica
+    base = alt.Chart(df).encode(x='Tiempo (s)')
+    
+    # Linea de la onda
+    linea = base.mark_line(color='#4ECDC4').encode(
+        y='Amplitud (mm)',
+        tooltip=['Tiempo (s)', 'Amplitud (mm)']
+    )
+    
+    # Relleno bajo la curva
+    area = base.mark_area(opacity=0.3, color='#4ECDC4').encode(
+        y='Amplitud (mm)'
+    )
+    
+    # Linea vertical que marca la llegada de la onda
+    regla = alt.Chart(pd.DataFrame({'x': [t_llegada]})).mark_rule(
+        color='#FF6B6B', strokeDash=[5,5]
+    ).encode(x='x')
+    
+    return (area + linea + regla).properties(title=titulo, height=350).interactive()
