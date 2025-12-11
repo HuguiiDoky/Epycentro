@@ -7,26 +7,26 @@ DATOS_SUELO = {
     "Arcilla": {"vel": 2.0, "amort": 0.20, "densidad": 1.6, "desc": "Suelo blando, alta amplificación."}
 }
 
+# Funciones principales
 def obtener_propiedades(tipo_suelo):
     return DATOS_SUELO.get(tipo_suelo, DATOS_SUELO["Arena"])
 
+# Calculo del tiempo teórico de llegada de la onda
 def calcular_tiempo_teorico(distancia, velocidad):
     return distancia / velocidad
 
+# Formula teórica de la onda sísmica
 def formula_teorica_onda():
     return r"A(t) = A_0 \cdot e^{-\alpha t} \cdot \sin(2\pi f t - kx)"
 
-# simulación de un evento sísmico
+# Simulación del evento sísmico
 def simular_evento(t, distancia, magnitud, suelo_data, tipo_onda):
     vel = suelo_data['vel']
     amort = suelo_data['amort']
     
-    if tipo_onda == "Onda P":
-        freq = 5.0; factor = 0.5; v_real = vel
-    elif tipo_onda == "Onda S":
-        freq = 3.0; factor = 1.0; v_real = vel / 1.7
-    else: 
-        freq = 1.0; factor = 2.0; v_real = vel / 2.5
+    if tipo_onda == "Onda P": freq = 5.0; factor = 0.5; v_real = vel
+    elif tipo_onda == "Onda S": freq = 3.0; factor = 1.0; v_real = vel / 1.7
+    else: freq = 1.0; factor = 2.0; v_real = vel / 2.5
 
     t_llegada = distancia / v_real
     amp_max = np.exp(magnitud / 2) * factor
@@ -34,8 +34,17 @@ def simular_evento(t, distancia, magnitud, suelo_data, tipo_onda):
     senal = np.zeros_like(t)
     mask = t >= t_llegada
     t_fase = t[mask] - t_llegada
-    
     senal[mask] = amp_max * np.exp(-amort * t_fase) * np.sin(2 * np.pi * freq * t_fase)
     
-    # Retornar la señal simulada, tiempo de llegada y amplitud máxima
     return senal, t_llegada, amp_max
+
+# Estimación de la escala Mercalli
+def estimar_mercalli(magnitud, distancia):
+    intensidad = magnitud - 1.5 * np.log10(max(distancia, 1)) + 2.5
+    intensidad = max(1, min(12, intensidad))
+    descripcion = "Leve"
+    if intensidad >= 4: descripcion = "Moderado"
+    if intensidad >= 6: descripcion = "Fuerte"
+    if intensidad >= 8: descripcion = "Destructivo"
+    if intensidad >= 10: descripcion = "Catastrófico"
+    return intensidad, descripcion
