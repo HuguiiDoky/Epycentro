@@ -1,66 +1,160 @@
 import streamlit as st
 import numpy as np
+import pandas as pd
 from PIL import Image
-import fisica
-import graficas
+import fisica    
+import graficas  
 
+# CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="Epycentro - Simulador Sísmico", layout="wide", page_icon="🌋")
 
 # BARRA LATERAL
 with st.sidebar:
     try:
         logo = Image.open("Epycentro.png")
-        st.image(logo)
+        st.image(logo, use_container_width=True)
     except:
-        st.write("🌋 Proyecto Epycentro")
+        st.header("🌋 Epycentro")
+        
+    st.header("🎛️ Control de Simulación")
+    st.caption("Configura los parámetros del evento:")
     
-    #Controles de magnitud, tipo de suelo y distacia
-    st.header("🎛️ Control de Sismo")
+    # Parámetros ajustables
     magnitud = st.slider("Magnitud (Mw)", 1.0, 9.0, 5.0)
     suelo_select = st.selectbox("Material del Suelo", ["Roca", "Arena", "Arcilla"])
     distancia = st.number_input("Distancia (km)", value=50.0)
-    # Control del tipo de onda
     tipo_onda = st.radio("Fase Sísmica", ["Onda P", "Onda S", "Superficial"])
 
-# Nombre de la página en grande y los objetivos
-st.title("🌋 Epycentro: Simulación Dinámica de Sísmos")
-st.markdown("""**Objetivos:**
-* Simular el comportamiento de ondas sísmicas (P, S y superficiales) a partir de un evento inicial.""")
+# ENCABEZADO
+st.title("🌋 Epycentro: Simulación Dinámica de Sismos")
+st.markdown("**Herramienta didáctica para el análisis de fenómenos sísmicos.**")
 
-# Pestañas mostradas
-tab1, tab2, tab3 = st.tabs(["📊 Simulación & Panel", "📘 Marco Teórico", "👥 Equipo"])
+# DEFINICIÓN DE PESTAÑAS (5 Pestañas)
+tab_inicio, tab_tutorial, tab_sim, tab_teoria, tab_equipo = st.tabs([
+    "🏠 Inicio & Descripción", 
+    "🎓 Tutorial de Uso", 
+    "📊 Simulación & Panel", 
+    "📘 Marco Teórico", 
+    "👥 Equipo"
+])
 
-# Lógica del programa
-datos_suelo = fisica.obtener_propiedades(suelo_select) # Día 1
-t_teorico = fisica.calcular_tiempo_teorico(distancia, datos_suelo['vel']) # Día 1
-
-# Simulación
+# CÁLCULOS (BACKEND)
+# Se calculan una vez para usarlos en cualquier pestaña
+datos_suelo = fisica.obtener_propiedades(suelo_select)
 t = np.linspace(0, 60, 1000)
 senal, t_llegada, amp_max = fisica.simular_evento(t, distancia, magnitud, datos_suelo, tipo_onda)
+imm_val, imm_desc = fisica.estimar_mercalli(magnitud, distancia)
 
-with tab1:
-    # 1. Sección de Métricas (recupera los dato)
+
+# PESTAÑA 1: INICIO Y DESCRIPCIÓN
+with tab_inicio:
+    st.header("Bienvenido a Epycentro")
+    st.markdown("""
+    Este proyecto tiene como objetivo **simular el comportamiento de ondas sísmicas** (P, S y superficiales) 
+    para comprender mejor su dinámica y propagación en distintos medios.
+    """)
+    
+    st.divider()
+    
+    col_desc1, col_desc2 = st.columns(2)
+    with col_desc1:
+        st.subheader("🔍 ¿Qué verás en la simulación?")
+        st.markdown("""
+        **1. Sismograma (1D):** Gráfica que muestra el desplazamiento del suelo (Amplitud) a lo largo del tiempo. 
+        Permite visualizar el momento exacto en que llega la onda a la estación.
+        
+        **2. Mapa de Propagación (2D):**
+        Una vista aérea que representa cómo la energía sísmica se expande desde el epicentro 
+        hacia afuera, similar a las ondas en el agua.
+        """)
+    
+    with col_desc2:
+        st.subheader("📋 Datos Generados")
+        st.markdown("""
+        El sistema calcula en tiempo real:
+        * **Velocidad de propagación:** Según si el suelo es Roca, Arena o Arcilla.
+        * **Tiempo de llegada:** Cuánto tarda la onda en recorrer la distancia definida.
+        * **Intensidad Mercalli:** Una estimación del nivel de destrucción o percepción.
+        """)
+    
+    st.info("👆 Navega por las pestañas de arriba para comenzar.")
+
+
+# PESTAÑA 2: TUTORIAL
+with tab_tutorial:
+    st.header("🎓 Guía de Uso")
+    st.markdown("Sigue estos pasos para realizar una simulación correcta:")
+    
+    st.markdown("""
+    ### 1. Configura el Evento (Barra Lateral)
+    En el menú de la izquierda encontrarás los controles:
+    * **Magnitud:** Define la energía liberada por el sismo (Escala Richter/Mw). A mayor magnitud, mayor amplitud en las gráficas.
+    * **Material del Suelo:** Selecciona el medio por donde viaja la onda.
+        * *Roca:* Ondas rápidas, poca atenuación (Suelo rígido).
+        * *Arena:* Velocidad media, atenuación moderada (Suelo granular).
+        * *Arcilla:* Ondas lentas, mayor amplificación (Suelo blando, más peligroso).
+    * **Distancia:** Qué tan lejos está la estación de medición del epicentro.
+    * **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales.
+
+    ### 2. Analiza el Panel de Simulación
+    Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
+    * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.
+
+    ### 3. Exporta tus Resultados
+    Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.
+    """)
+
+
+# PESTAÑA 3: SIMULACIÓN
+with tab_sim:
+    # 1. MÉTRICAS
     st.subheader("Parámetros Físicos del Entorno")
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Velocidad Medio", f"{datos_suelo['vel']} km/s")
     col2.metric("Amortiguamiento", f"{datos_suelo['amort']}")
     col3.metric("Densidad", f"{datos_suelo['densidad']} g/cm³")
-    # Métrica nueva del Día 2
-    col4.metric("Tiempo Llegada Real", f"{t_llegada:.2f} s", delta=f"Teórico: {t_teorico:.2f} s")
+    col4.metric("Intensidad (Mercalli)", f"{imm_val:.1f}", delta=imm_desc, delta_color="off")
     
-    st.info(f"Suelo: {datos_suelo['desc']}")
-    
+    st.info(f"Suelo: {datos_suelo['desc']} | Tiempo de llegada estimado: **{t_llegada:.2f} s**")
     st.markdown("---")
-    
-    # 2. Sección de la Gráfica
-    st.subheader(f"Sismograma en Tiempo Real ({tipo_onda})")
-    grafico = graficas.renderizar_sismograma(t, senal, t_llegada, f"Registro en estación a {distancia} km")
-    st.altair_chart(grafico, use_container_width=True)
 
-with tab2:
-    # Marco teoríco
+    # 2. VISUALIZACIÓN VERTICAL
+    st.subheader("Monitor de Propagación de Ondas")
+    
+    # GRÁFICA 1: SISMOGRAMA
+    st.subheader("1. Sismograma (1D)")
+    st.caption(f"Registro de amplitud en estación a {distancia} km")
+    grafico1 = graficas.renderizar_sismograma(t, senal, t_llegada, f"Sismograma Sintético - {tipo_onda}")
+    st.altair_chart(grafico1, use_container_width=True)
+    
+    st.markdown("---") 
+        
+    # GRÁFICA 2: MAPA 2D
+    st.subheader("2. Propagación de Ondas (2D)")
+    st.caption("Vista aérea del campo de desplazamiento desde el epicentro")
+    
+    fig2 = graficas.generar_mapa_calor(magnitud, distancia)
+    st.pyplot(fig2, use_container_width=True)
+        
+    # 3. REGISTRO DE DATOS
+    st.markdown("---")
+    st.subheader("📋 Registro de Resultados")
+    
+    with st.expander("Ver Datos Detallados y Descargar"):
+        df_export = pd.DataFrame({
+            "Tiempo (s)": t,
+            "Amplitud": senal,
+            "Velocidad": np.gradient(senal, t)
+        })
+        st.dataframe(df_export.head(10), use_container_width=True)
+        
+        csv = df_export.to_csv(index=False).encode('utf-8')
+        st.download_button("💾 Descargar CSV", csv, "datos_sismo.csv", "text/csv")
+
+
+# PESTAÑA 4: MARCO TEÓRICO
+with tab_teoria:
     st.subheader("Modelo Matemático")
-    st.markdown("El comportamiento de la onda se rige por la ecuación diferencial amortiguada:")
     st.latex(fisica.formula_teorica_onda())
     st.markdown("""
     **Donde:**
@@ -69,8 +163,9 @@ with tab2:
     * $t$: Tiempo transcurrido desde el origen
     """)
 
-with tab3:
-    # Integrantes del Equipo
+
+# PESTAÑA 5: EQUIPO
+with tab_equipo:
     st.subheader("Integrantes del Equipo")
     st.write("* Hugo Yael Castrejón Salgado")
     st.write("* Miguel Angel Navarro Hernandez")

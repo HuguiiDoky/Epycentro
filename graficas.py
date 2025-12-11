@@ -2,14 +2,12 @@ import altair as alt
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# DÍA 1
 def configurar_estilo_visual():
     """Configura estilos globales (útil para cuando usemos Matplotlib en el futuro)."""
     plt.style.use('dark_background')
     plt.rcParams['text.color'] = 'white'
     return "Estilos configurados."
 
-# DÍA 2
 def renderizar_sismograma(t, senal, t_llegada, titulo):
     """
     Genera el gráfico interactivo del sismograma.
