@@ -1,25 +1,21 @@
 import numpy as np
 
-# Datos de propiedades del suelo
+# Datos del suelo
 DATOS_SUELO = {
     "Roca": {"vel": 6.0, "amort": 0.05, "densidad": 2.7, "desc": "Suelo rígido, alta velocidad."},
     "Arena": {"vel": 3.5, "amort": 0.10, "densidad": 1.9, "desc": "Suelo granular, disipación media."},
     "Arcilla": {"vel": 2.0, "amort": 0.20, "densidad": 1.6, "desc": "Suelo blando, alta amplificación."}
 }
 
-# Funciones principales
 def obtener_propiedades(tipo_suelo):
     return DATOS_SUELO.get(tipo_suelo, DATOS_SUELO["Arena"])
 
-# Calculo del tiempo teórico de llegada de la onda
 def calcular_tiempo_teorico(distancia, velocidad):
     return distancia / velocidad
 
-# Formula teórica de la onda sísmica
 def formula_teorica_onda():
     return r"A(t) = A_0 \cdot e^{-\alpha t} \cdot \sin(2\pi f t - kx)"
 
-# Simulación del evento sísmico
 def simular_evento(t, distancia, magnitud, suelo_data, tipo_onda):
     vel = suelo_data['vel']
     amort = suelo_data['amort']
@@ -38,7 +34,6 @@ def simular_evento(t, distancia, magnitud, suelo_data, tipo_onda):
     
     return senal, t_llegada, amp_max
 
-# Estimación de la escala Mercalli
 def estimar_mercalli(magnitud, distancia):
     intensidad = magnitud - 1.5 * np.log10(max(distancia, 1)) + 2.5
     intensidad = max(1, min(12, intensidad))
