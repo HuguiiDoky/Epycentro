@@ -19,10 +19,10 @@ def renderizar_sismograma(t, senal, t_llegada, titulo):
 def generar_mapa_calor(magnitud, distancia_estacion):
     x = np.linspace(-100, 100, 150)
     X, Y = np.meshgrid(x, x)
-    R = np.sqrt(X*2 + Y*2)
+    R = np.sqrt(X**2 + Y**2)
     Z = np.sin(R/5 - magnitud) * np.exp(-R/40)
     
-    fig, ax = plt.subplots(figsize=(8, 6)) 
+    fig, ax = plt.subplots(figsize=(8, 6))
     fig.patch.set_facecolor('#0E1117')
     ax.set_facecolor('#0E1117')
     
