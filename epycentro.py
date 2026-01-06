@@ -95,6 +95,7 @@ with tab_tutorial:
         * *Arcilla:* Ondas lentas, mayor amplificación (Suelo blando, más peligroso).
     * **Distancia:** Qué tan lejos está la estación de medición del epicentro.
     * **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales:
+        
         * **🔴Onda P (Primaria):**
             * *Definición:* Son las ondas más rápidas y las primeras en registrarse en un sismograma (de ahí su nombre "Primarias").
             * *Movimiento:* Funcionan como un acordeón: comprimen y estiran la roca en la misma dirección en la que viajan (movimiento logitudinal).
@@ -170,23 +171,23 @@ with tab_teoria:
     st.subheader("Fundamentos de Sismología")
 
     st.markdown('### Tipos de Ondas Sísmicas')
-    col_t1, col_t2, col_t3 = st.colums(3)
+    colum_t1, colum_t2, colum_t3 = st.colums(3)
 
-    with col_t1:
+    with colum_t1:
         st.info("**🔴Onda P (Primaria)**")
         st.markdown("""
                     * **Velocidad:** Alta (aprox. 6 km/s en roca )
                     * **Llegada:** 1ra en registrarse.
                     * **Efecto:** Comprime y expande el suelo (como un acordeón). Se siente como un golpe seco vertical.""")
     
-    with col_t2:
+    with colum_t2:
         st.info("**🔵Onda S (Secundaria)**")
         st.markdown("""
                     * **Velocidad:** Media (aprox. 3.5 km/s)
                     * **Llegada:** 2da en registrarse.
                     * **Efecto:** Mueve el suelo de lado a lado (corte). Es peligrosa para edificios rígidos.""")
     
-    with col_t3:
+    with colum_t3:
         st.info("**🔘Onda Superficial**")
         st.markdown("""
                     * **Velocidad:** Baja (< 3 km/s).
