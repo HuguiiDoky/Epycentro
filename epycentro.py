@@ -95,7 +95,7 @@ with tab_tutorial:
         * *Arcilla:* Ondas lentas, mayor amplificación (Suelo blando, más peligroso).
     * **Distancia:** Qué tan lejos está la estación de medición del epicentro.
     * **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales:
-        * **🔴Onda P (Primaria):*
+        * **🔴Onda P (Primaria):**
             * *Definición:* Son las ondas más rápidas y las primeras en registrarse en un sismograma (de ahí su nombre "Primarias").
             * *Movimiento:* Funcionan como un acordeón: comprimen y estiran la roca en la misma dirección en la que viajan (movimiento logitudinal).
             * *Caractrísticas:* Pueden viajar a tráves de sólidos, líquidos y gases (por eso atraviesan el núcleo de la Tierra). Suelen sentirse
