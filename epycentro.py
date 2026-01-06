@@ -94,8 +94,21 @@ with tab_tutorial:
         * *Arena:* Velocidad media, atenuación moderada (Suelo granular).
         * *Arcilla:* Ondas lentas, mayor amplificación (Suelo blando, más peligroso).
     * **Distancia:** Qué tan lejos está la estación de medición del epicentro.
-    * **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales.
-
+    * **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales:
+        * **🔴Onda P (Primaria):*
+            * *Definición:* Son las ondas más rápidas y las primeras en registrarse en un sismograma (de ahí su nombre "Primarias").
+            * *Movimiento:* Funcionan como un acordeón: comprimen y estiran la roca en la misma dirección en la que viajan (movimiento logitudinal).
+            * *Caractrísticas:* Pueden viajar a tráves de sólidos, líquidos y gases (por eso atraviesan el núcleo de la Tierra). Suelen sentirse
+               como un "golpe" o "ruido" repentino al inicio del sismo.
+        * **🔵Onda S (Secundaria):**
+            * *Definición:* Son más lentas que las ondas P y llegan en segundo lugar.
+            * *Movimiento:* Sacuden el suelo hacia arriba y hacia abajo, o de lado a lado, perpendicular a la dirección en la que viajan (movimiento transversal o de cizalla).
+            * *Características:* Solo viajan a través de sólidos (no pueden atravesar el núcleo líquido externo de la Tierra). Son las que empiezan a causar daños 
+                en las estructuras por su movimiento de sacudida.
+        * **🔘Onda Superficial (R y L):**
+            * *Definición:* Son ondas que viajan solo por la corteza terrestre (la superficie), no por el interior profundo. Son más lentas que las P y S, pero tienen mayor amplitud.
+            * *Movimiento:* Tienen un movimiento complejo, similar a las olas del mar (rodante) o de serpiente (lateral).
+            * *Características:* Son las responsables de la mayor parte de la destrucción y daños catastróficos durante un terremoto grande, ya que mueven el suelo violentamente y su energía tarda más en disiparse.
     ### 2. Analiza el Panel de Simulación
     Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
     * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.
@@ -154,7 +167,36 @@ with tab_sim:
 
 # PESTAÑA 4: MARCO TEÓRICO
 with tab_teoria:
+    st.subheader("Fundamentos de Sismología")
+
+    st.markdown('### Tipos de Ondas Sísmicas')
+    col_t1, col_t2, col_t3 = st.colums(3)
+
+    with col_t1:
+        st.info("**🔴Onda P (Primaria)**")
+        st.markdown("""
+                    * **Velocidad:** Alta (aprox. 6 km/s en roca )
+                    * **Llegada:** 1ra en registrarse.
+                    * **Efecto:** Comprime y expande el suelo (como un acordeón). Se siente como un golpe seco vertical.""")
+    
+    with col_t2:
+        st.info("**🔵Onda S (Secundaria)**")
+        st.markdown("""
+                    * **Velocidad:** Media (aprox. 3.5 km/s)
+                    * **Llegada:** 2da en registrarse.
+                    * **Efecto:** Mueve el suelo de lado a lado (corte). Es peligrosa para edificios rígidos.""")
+    
+    with col_t3:
+        st.info("**🔘Onda Superficial**")
+        st.markdown("""
+                    * **Velocidad:** Baja (< 3 km/s).
+                    * **Llegada:** Última en registrarse.
+                    * **Efecto:** Movimiento rodante u oscilatorio violento. Causa la mayor destrucción en superficie.""")
+    
+    st.divider()
+    
     st.subheader("Modelo Matemático")
+    st.markdown("El comportamiento simulado se rige por la ecuación de onda amortiguada:")
     st.latex(fisica.formula_teorica_onda())
     st.markdown("""
     **Donde:**
