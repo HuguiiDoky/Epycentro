@@ -171,7 +171,7 @@ with tab_teoria:
     st.subheader("Fundamentos de Sismología")
 
     st.markdown('### Tipos de Ondas Sísmicas')
-    colum_t1, colum_t2, colum_t3 = st.colums(3)
+    colum_t1, colum_t2, colum_t3 = st.columns(3)
 
     with colum_t1:
         st.info("**🔴Onda P (Primaria)**")
