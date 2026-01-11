@@ -6,7 +6,7 @@ import fisica
 import graficas  
 
 # CONFIGURACIÓN DE PÁGINA
-st.set_page_config(page_title="Epycentro - Simulador Sísmico", layout="wide", page_icon="🌋")
+st.set_page_config(page_title="Epycentro - Simulador Sísmico", layout="wide", page_icon="Epycentro.png")
 
 # BARRA LATERAL
 with st.sidebar:
@@ -26,10 +26,22 @@ with st.sidebar:
     tipo_onda = st.radio("Fase Sísmica", ["Onda P", "Onda S", "Superficial"])
 
 # ENCABEZADO
-st.title("🌋 Epycentro: Simulación Dinámica de Sismos")
+# Usamos columnas para alinear la imagen con el texto
+col_logo, col_titulo = st.columns([1, 12]) 
+
+with col_logo:
+    try:
+        # Logo pequeño al lado del título
+        st.image("Epycentro.png", width=80)
+    except:
+        st.write("🌋") # Respaldo por si acaso
+
+with col_titulo:
+    st.title("Epycentro: Simulación Dinámica de Sismos")
+
 st.markdown("**Herramienta didáctica para el análisis de fenómenos sísmicos.**")
 
-# DEFINICIÓN DE PESTAÑAS (5 Pestañas)
+# DEFINICIÓN DE PESTAÑAS
 tab_inicio, tab_tutorial, tab_sim, tab_teoria, tab_equipo = st.tabs([
     "🏠 Inicio & Descripción", 
     "🎓 Tutorial de Uso", 
@@ -38,7 +50,7 @@ tab_inicio, tab_tutorial, tab_sim, tab_teoria, tab_equipo = st.tabs([
     "👥 Equipo"
 ])
 
-# CÁLCULOS (BACKEND)
+# CÁLCULOS
 # Se calculan una vez para usarlos en cualquier pestaña
 datos_suelo = fisica.obtener_propiedades(suelo_select)
 t = np.linspace(0, 60, 1000)
