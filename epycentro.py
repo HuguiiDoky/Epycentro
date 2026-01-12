@@ -118,14 +118,15 @@ with tab_tutorial:
         * **🔘Onda Superficial (R y L):**
             * *Definición:* Son ondas que viajan solo por la corteza terrestre (la superficie), no por el interior profundo. Son más lentas que las P y S, pero tienen mayor amplitud.
             * *Movimiento:* Tienen un movimiento complejo, similar a las olas del mar (rodante) o de serpiente (lateral).
-            * *Características:* Son las responsables de la mayor parte de la destrucción y daños catastróficos durante un terremoto grande, ya que mueven el suelo violentamente y su energía tarda más en disiparse.
-    ### 2. Analiza el Panel de Simulación
-    Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
-    * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.
-
-    ### 3. Exporta tus Resultados
-    Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.
+            * *Características:* Son las responsables de la mayor parte de la destrucción y daños catastróficos durante un terremoto grande, ya que mueven el suelo violentamente y su energía tarda más en disiparse. 
     """)
+    st.markdown("---")
+    st.markdown("""###2. Analiza el Panel de Simulación
+    Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
+    * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.""")
+    st.markdown("---")
+    st.markdown("""### 3. Exporta tus Resultados
+    Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.""")
 
 
 # --- PESTAÑA 3: SIMULACIÓN (INTACTA) ---
