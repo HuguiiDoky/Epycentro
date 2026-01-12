@@ -121,7 +121,7 @@ with tab_tutorial:
             * *Características:* Son las responsables de la mayor parte de la destrucción y daños catastróficos durante un terremoto grande, ya que mueven el suelo violentamente y su energía tarda más en disiparse. 
     """)
     st.markdown("---")
-    st.markdown("""###2. Analiza el Panel de Simulación
+    st.markdown("""### 2. Analiza el Panel de Simulación
     Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
     * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.""")
     st.markdown("---")
