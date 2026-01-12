@@ -5,10 +5,10 @@ from PIL import Image
 import fisica    
 import graficas  
 
-# CONFIGURACIÓN DE PÁGINA
+# --- CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(page_title="Epycentro - Simulador Sísmico", layout="wide", page_icon="Epycentro.png")
 
-# BARRA LATERAL
+# --- BARRA LATERAL ---
 with st.sidebar:
     try:
         logo = Image.open("Epycentro.png")
@@ -25,40 +25,37 @@ with st.sidebar:
     distancia = st.number_input("Distancia (km)", value=50.0)
     tipo_onda = st.radio("Fase Sísmica", ["Onda P", "Onda S", "Superficial"])
 
-# ENCABEZADO
-# Usamos columnas para alinear la imagen con el texto
+# --- ENCABEZADO ---
 col_logo, col_titulo = st.columns([1, 12]) 
 
 with col_logo:
     try:
-        # Logo pequeño al lado del título
         st.image("Epycentro.png", width=80)
     except:
-        st.write("🌋") # Respaldo por si acaso
+        st.write("🌋") 
 
 with col_titulo:
     st.title("Epycentro: Simulación Dinámica de Sismos")
 
 st.markdown("**Herramienta didáctica para el análisis de fenómenos sísmicos.**")
 
-# DEFINICIÓN DE PESTAÑAS
+# --- DEFINICIÓN DE PESTAÑAS ---
 tab_inicio, tab_tutorial, tab_sim, tab_teoria, tab_equipo = st.tabs([
     "🏠 Inicio & Descripción", 
     "🎓 Tutorial de Uso", 
     "📊 Simulación & Panel", 
     "📘 Marco Teórico", 
-    "👥 Equipo"
+    "👥 Equipo & Créditos"
 ])
 
-# CÁLCULOS
-# Se calculan una vez para usarlos en cualquier pestaña
+# --- CÁLCULOS (BACKEND) ---
 datos_suelo = fisica.obtener_propiedades(suelo_select)
 t = np.linspace(0, 60, 1000)
 senal, t_llegada, amp_max = fisica.simular_evento(t, distancia, magnitud, datos_suelo, tipo_onda)
 imm_val, imm_desc = fisica.estimar_mercalli(magnitud, distancia)
 
 
-# PESTAÑA 1: INICIO Y DESCRIPCIÓN
+# --- PESTAÑA 1: INICIO Y DESCRIPCIÓN (INTACTA) ---
 with tab_inicio:
     st.header("Bienvenido a Epycentro")
     st.markdown("""
@@ -92,7 +89,7 @@ with tab_inicio:
     st.info("👆 Navega por las pestañas de arriba para comenzar.")
 
 
-# PESTAÑA 2: TUTORIAL
+# --- PESTAÑA 2: TUTORIAL (INTACTA - Texto Completo) ---
 with tab_tutorial:
     st.header("🎓 Guía de Uso")
     st.markdown("Sigue estos pasos para realizar una simulación correcta:")
@@ -131,7 +128,7 @@ with tab_tutorial:
     """)
 
 
-# PESTAÑA 3: SIMULACIÓN
+# --- PESTAÑA 3: SIMULACIÓN (INTACTA) ---
 with tab_sim:
     # 1. MÉTRICAS
     st.subheader("Parámetros Físicos del Entorno")
@@ -178,7 +175,7 @@ with tab_sim:
         st.download_button("💾 Descargar CSV", csv, "datos_sismo.csv", "text/csv")
 
 
-# PESTAÑA 4: MARCO TEÓRICO
+# --- PESTAÑA 4: MARCO TEÓRICO (INTACTA - Texto Completo) ---
 with tab_teoria:
     st.subheader("Fundamentos de Sismología")
 
@@ -219,9 +216,33 @@ with tab_teoria:
     """)
 
 
-# PESTAÑA 5: EQUIPO
+# --- PESTAÑA 5: EQUIPO (LA ÚNICA MODIFICADA) ---
 with tab_equipo:
-    st.subheader("Integrantes del Equipo")
-    st.write("* Hugo Yael Castrejón Salgado")
-    st.write("* Miguel Angel Navarro Hernandez")
-    st.write("* Angel Jose Rendon Nuñez")
+    st.header("Créditos del Proyecto")
+    
+    # Creamos las columnas para el diseño "Opción A"
+    col_escuela, col_datos = st.columns([1, 2])
+    
+    with col_escuela:
+        try:
+            # Logo de la escuela a la izquierda
+            logo_escuela = Image.open("hipocrates.png")
+            st.image(logo_escuela, use_container_width=True)
+        except:
+            st.warning("No se encontró 'hipocrates.png'")
+            
+    with col_datos:
+        st.subheader("👨‍🎓 Integrantes")
+        st.write("* **Hugo Yael Castrejón Salgado**")
+        st.write("* **Miguel Angel Navarro Hernandez**")
+        st.write("* **Angel Jose Rendon Nuñez**")
+        
+        st.divider()
+        
+        st.subheader("👨‍🏫 Docentes & Materias")
+        
+        st.markdown("**Ing. Samuel Alvarado Agama**")
+        st.caption("Entorno Gráfico de Programación")
+        
+        st.markdown("**Ing. Geiner Alfonso Niño Salgado**")
+        st.caption("Cálculo Univariable")
