@@ -240,9 +240,9 @@ with tab_equipo:
         st.divider()
         
         st.subheader("👨‍🏫 Docentes & Materias")
+
+        st.markdown("**Ing. Geiner Alfonso Niño Salgado**")
+        st.caption("Cálculo Univariable")
         
         st.markdown("**Ing. Samuel Alvarado Agama**")
         st.caption("Entorno Gráfico de Programación")
-        
-        st.markdown("**Ing. Geiner Alfonso Niño Salgado**")
-        st.caption("Cálculo Univariable")
