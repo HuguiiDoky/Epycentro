@@ -5,10 +5,10 @@ from PIL import Image
 import fisica    
 import graficas  
 
-# --- CONFIGURACIÓN DE PÁGINA ---
+# CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="Epycentro - Simulador Sísmico", layout="wide", page_icon="Epycentro.png")
 
-# --- BARRA LATERAL ---
+# BARRA LATERAL
 with st.sidebar:
     try:
         logo = Image.open("Epycentro.png")
@@ -25,7 +25,7 @@ with st.sidebar:
     distancia = st.number_input("Distancia (km)", value=50.0)
     tipo_onda = st.radio("Fase Sísmica", ["Onda P", "Onda S", "Superficial"])
 
-# --- ENCABEZADO ---
+# ENCABEZADO
 col_logo, col_titulo = st.columns([1, 12]) 
 
 with col_logo:
@@ -39,7 +39,7 @@ with col_titulo:
 
 st.markdown("**Herramienta didáctica para el análisis de fenómenos sísmicos.**")
 
-# --- DEFINICIÓN DE PESTAÑAS ---
+# DEFINICIÓN DE PESTAÑAS
 tab_inicio, tab_tutorial, tab_sim, tab_teoria, tab_equipo = st.tabs([
     "🏠 Inicio & Descripción", 
     "🎓 Tutorial de Uso", 
@@ -48,14 +48,14 @@ tab_inicio, tab_tutorial, tab_sim, tab_teoria, tab_equipo = st.tabs([
     "👥 Equipo & Créditos"
 ])
 
-# --- CÁLCULOS (BACKEND) ---
+# CÁLCULOS (BACKEND)
 datos_suelo = fisica.obtener_propiedades(suelo_select)
 t = np.linspace(0, 60, 1000)
 senal, t_llegada, amp_max = fisica.simular_evento(t, distancia, magnitud, datos_suelo, tipo_onda)
 imm_val, imm_desc = fisica.estimar_mercalli(magnitud, distancia)
 
 
-# --- PESTAÑA 1: INICIO Y DESCRIPCIÓN ---
+# PESTAÑA 1: INICIO Y DESCRIPCIÓN
 with tab_inicio:
     st.header("Bienvenido a Epycentro")
     st.markdown("""
@@ -89,54 +89,53 @@ with tab_inicio:
     st.info("👆 Navega por las pestañas de arriba para comenzar.")
 
 
-# --- PESTAÑA 2: TUTORIAL (CORREGIDO - Sin rectángulos) ---
+# PESTAÑA 2: TUTORIAL
 with tab_tutorial:
     st.header("🎓 Guía de Uso")
     st.markdown("Sigue estos pasos para realizar una simulación correcta:")
     
-    # Nota: He quitado los espacios a la izquierda dentro de las comillas para evitar los rectángulos grises
     st.markdown("""
-### 1. Configura el Evento (Barra Lateral)
-En el menú de la izquierda encontrarás los controles:
-* **Magnitud:** Define la energía liberada por el sismo (Escala Richter/Mw). A mayor magnitud, mayor amplitud en las gráficas.
-* **Material del Suelo:** Selecciona el medio por donde viaja la onda.
-    * *Roca:* Ondas rápidas, poca atenuación (Suelo rígido).
-    * *Arena:* Velocidad media, atenuación moderada (Suelo granular).
-    * *Arcilla:* Ondas lentas, mayor amplificación (Suelo blando, más peligroso).
-* **Distancia:** Qué tan lejos está la estación de medición del epicentro.
-* **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales:
+    ### 1. Configura el Evento (Barra Lateral)
+    En el menú de la izquierda encontrarás los controles:
+    * **Magnitud:** Define la energía liberada por el sismo (Escala Richter/Mw). A mayor magnitud, mayor amplitud en las gráficas.
+    * **Material del Suelo:** Selecciona el medio por donde viaja la onda.
+        * *Roca:* Ondas rápidas, poca atenuación (Suelo rígido).
+        * *Arena:* Velocidad media, atenuación moderada (Suelo granular).
+        * *Arcilla:* Ondas lentas, mayor amplificación (Suelo blando, más peligroso).
+    * **Distancia:** Qué tan lejos está la estación de medición del epicentro.
+    * **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales:
     
-    * **🔴Onda P (Primaria):**
-        * *Definición:* Son las ondas más rápidas y las primeras en registrarse en un sismograma.
-        * *Movimiento:* Comprimen y estiran la roca (longitudinal).
-        * *Características:* Atraviesan sólidos y líquidos. Se sienten como un golpe seco.
-    * **🔵Onda S (Secundaria):**
-        * *Definición:* Son más lentas y llegan en segundo lugar.
-        * *Movimiento:* Sacudida vertical o lateral (transversal).
-        * *Características:* Solo viajan por sólidos. Causan daños estructurales.
-    * **🔘Onda Superficial (R y L):**
-        * *Definición:* Viajan por la corteza. Son lentas pero de gran amplitud.
-        * *Movimiento:* Rodante u oscilatorio complejo.
-        * *Características:* Causan la mayor destrucción.
+        * **🔴Onda P (Primaria):**
+            * *Definición:* Son las ondas más rápidas y las primeras en registrarse en un sismograma.
+            * *Movimiento:* Comprimen y estiran la roca (longitudinal).
+            * *Características:* Atraviesan sólidos y líquidos. Se sienten como un golpe seco.
+        * **🔵Onda S (Secundaria):**
+            * *Definición:* Son más lentas y llegan en segundo lugar.
+            * *Movimiento:* Sacudida vertical o lateral (transversal).
+            * *Características:* Solo viajan por sólidos. Causan daños estructurales.
+        * **🔘Onda Superficial (R y L):**
+            * *Definición:* Viajan por la corteza. Son lentas pero de gran amplitud.
+            * *Movimiento:* Rodante u oscilatorio complejo.
+            * *Características:* Causan la mayor destrucción.
     """)
     
     st.markdown("---")
     
     st.markdown("""
-### 2. Analiza el Panel de Simulación
-Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
-* *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.
+    ### 2. Analiza el Panel de Simulación
+    Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
+    * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.
     """)
     
     st.markdown("---")
     
     st.markdown("""
-### 3. Exporta tus Resultados
-Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.
+    ### 3. Exporta tus Resultados
+    Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.
     """)
 
 
-# --- PESTAÑA 3: SIMULACIÓN ---
+# PESTAÑA 3: SIMULACIÓN
 with tab_sim:
     # 1. MÉTRICAS
     st.subheader("Parámetros Físicos del Entorno")
@@ -183,7 +182,7 @@ with tab_sim:
         st.download_button("💾 Descargar CSV", csv, "datos_sismo.csv", "text/csv")
 
 
-# --- PESTAÑA 4: MARCO TEÓRICO ---
+# PESTAÑA 4: MARCO TEÓRICO
 with tab_teoria:
     st.subheader("Fundamentos de Sismología")
 
@@ -224,7 +223,7 @@ with tab_teoria:
     """)
 
 
-# --- PESTAÑA 5: EQUIPO ---
+# PESTAÑA 5: EQUIPO
 with tab_equipo:
     st.header("Créditos del Proyecto")
     
