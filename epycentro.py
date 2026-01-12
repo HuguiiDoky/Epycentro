@@ -123,10 +123,12 @@ with tab_tutorial:
     st.markdown("---")
     st.markdown("""### 2. Analiza el Panel de Simulación
     Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
-    * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.""")
+    * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.
+    """)
     st.markdown("---")
     st.markdown("""### 3. Exporta tus Resultados
-    Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.""")
+    Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.
+    """)
 
 
 # --- PESTAÑA 3: SIMULACIÓN (INTACTA) ---
