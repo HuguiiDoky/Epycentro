@@ -55,7 +55,7 @@ senal, t_llegada, amp_max = fisica.simular_evento(t, distancia, magnitud, datos_
 imm_val, imm_desc = fisica.estimar_mercalli(magnitud, distancia)
 
 
-# --- PESTAÑA 1: INICIO Y DESCRIPCIÓN (INTACTA) ---
+# --- PESTAÑA 1: INICIO Y DESCRIPCIÓN ---
 with tab_inicio:
     st.header("Bienvenido a Epycentro")
     st.markdown("""
@@ -89,49 +89,54 @@ with tab_inicio:
     st.info("👆 Navega por las pestañas de arriba para comenzar.")
 
 
-# --- PESTAÑA 2: TUTORIAL (INTACTA - Texto Completo) ---
+# --- PESTAÑA 2: TUTORIAL (CORREGIDO - Sin rectángulos) ---
 with tab_tutorial:
     st.header("🎓 Guía de Uso")
     st.markdown("Sigue estos pasos para realizar una simulación correcta:")
     
+    # Nota: He quitado los espacios a la izquierda dentro de las comillas para evitar los rectángulos grises
     st.markdown("""
-    ### 1. Configura el Evento (Barra Lateral)
-    En el menú de la izquierda encontrarás los controles:
-    * **Magnitud:** Define la energía liberada por el sismo (Escala Richter/Mw). A mayor magnitud, mayor amplitud en las gráficas.
-    * **Material del Suelo:** Selecciona el medio por donde viaja la onda.
-        * *Roca:* Ondas rápidas, poca atenuación (Suelo rígido).
-        * *Arena:* Velocidad media, atenuación moderada (Suelo granular).
-        * *Arcilla:* Ondas lentas, mayor amplificación (Suelo blando, más peligroso).
-    * **Distancia:** Qué tan lejos está la estación de medición del epicentro.
-    * **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales:
-        
-        * **🔴Onda P (Primaria):**
-            * *Definición:* Son las ondas más rápidas y las primeras en registrarse en un sismograma (de ahí su nombre "Primarias").
-            * *Movimiento:* Funcionan como un acordeón: comprimen y estiran la roca en la misma dirección en la que viajan (movimiento logitudinal).
-            * *Caractrísticas:* Pueden viajar a tráves de sólidos, líquidos y gases (por eso atraviesan el núcleo de la Tierra). Suelen sentirse
-               como un "golpe" o "ruido" repentino al inicio del sismo.
-        * **🔵Onda S (Secundaria):**
-            * *Definición:* Son más lentas que las ondas P y llegan en segundo lugar.
-            * *Movimiento:* Sacuden el suelo hacia arriba y hacia abajo, o de lado a lado, perpendicular a la dirección en la que viajan (movimiento transversal o de cizalla).
-            * *Características:* Solo viajan a través de sólidos (no pueden atravesar el núcleo líquido externo de la Tierra). Son las que empiezan a causar daños 
-                en las estructuras por su movimiento de sacudida.
-        * **🔘Onda Superficial (R y L):**
-            * *Definición:* Son ondas que viajan solo por la corteza terrestre (la superficie), no por el interior profundo. Son más lentas que las P y S, pero tienen mayor amplitud.
-            * *Movimiento:* Tienen un movimiento complejo, similar a las olas del mar (rodante) o de serpiente (lateral).
-            * *Características:* Son las responsables de la mayor parte de la destrucción y daños catastróficos durante un terremoto grande, ya que mueven el suelo violentamente y su energía tarda más en disiparse. 
+### 1. Configura el Evento (Barra Lateral)
+En el menú de la izquierda encontrarás los controles:
+* **Magnitud:** Define la energía liberada por el sismo (Escala Richter/Mw). A mayor magnitud, mayor amplitud en las gráficas.
+* **Material del Suelo:** Selecciona el medio por donde viaja la onda.
+    * *Roca:* Ondas rápidas, poca atenuación (Suelo rígido).
+    * *Arena:* Velocidad media, atenuación moderada (Suelo granular).
+    * *Arcilla:* Ondas lentas, mayor amplificación (Suelo blando, más peligroso).
+* **Distancia:** Qué tan lejos está la estación de medición del epicentro.
+* **Fase Sísmica:** Elige ver ondas Primarias (P), Secundarias (S) o Superficiales:
+    
+    * **🔴Onda P (Primaria):**
+        * *Definición:* Son las ondas más rápidas y las primeras en registrarse en un sismograma.
+        * *Movimiento:* Comprimen y estiran la roca (longitudinal).
+        * *Características:* Atraviesan sólidos y líquidos. Se sienten como un golpe seco.
+    * **🔵Onda S (Secundaria):**
+        * *Definición:* Son más lentas y llegan en segundo lugar.
+        * *Movimiento:* Sacudida vertical o lateral (transversal).
+        * *Características:* Solo viajan por sólidos. Causan daños estructurales.
+    * **🔘Onda Superficial (R y L):**
+        * *Definición:* Viajan por la corteza. Son lentas pero de gran amplitud.
+        * *Movimiento:* Rodante u oscilatorio complejo.
+        * *Características:* Causan la mayor destrucción.
     """)
+    
     st.markdown("---")
-    st.markdown("""### 2. Analiza el Panel de Simulación
-    Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
-    * *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.
+    
+    st.markdown("""
+### 2. Analiza el Panel de Simulación
+Ve a la pestaña **📊 Simulación & Panel**. Observa cómo cambian las gráficas al mover los controles.
+* *Nota:* Si aumentas la distancia, la onda tardará más en aparecer en el sismograma.
     """)
+    
     st.markdown("---")
-    st.markdown("""### 3. Exporta tus Resultados
-    Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.
+    
+    st.markdown("""
+### 3. Exporta tus Resultados
+Al final del panel de simulación, encontrarás una sección para descargar los datos en formato CSV para usarlos en Excel o Python.
     """)
 
 
-# --- PESTAÑA 3: SIMULACIÓN (INTACTA) ---
+# --- PESTAÑA 3: SIMULACIÓN ---
 with tab_sim:
     # 1. MÉTRICAS
     st.subheader("Parámetros Físicos del Entorno")
@@ -178,7 +183,7 @@ with tab_sim:
         st.download_button("💾 Descargar CSV", csv, "datos_sismo.csv", "text/csv")
 
 
-# --- PESTAÑA 4: MARCO TEÓRICO (INTACTA - Texto Completo) ---
+# --- PESTAÑA 4: MARCO TEÓRICO ---
 with tab_teoria:
     st.subheader("Fundamentos de Sismología")
 
@@ -219,16 +224,14 @@ with tab_teoria:
     """)
 
 
-# --- PESTAÑA 5: EQUIPO (LA ÚNICA MODIFICADA) ---
+# --- PESTAÑA 5: EQUIPO ---
 with tab_equipo:
     st.header("Créditos del Proyecto")
     
-    # Creamos las columnas para el diseño "Opción A"
     col_escuela, col_datos = st.columns([1, 2])
     
     with col_escuela:
         try:
-            # Logo de la escuela a la izquierda
             logo_escuela = Image.open("hipocrates.png")
             st.image(logo_escuela, use_container_width=True)
         except:
